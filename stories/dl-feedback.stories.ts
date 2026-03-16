@@ -20,7 +20,18 @@ export const Alerts: Story = {
       <dl-alert variant="info">This is an informational message.</dl-alert>
       <dl-alert variant="success">Operation completed successfully!</dl-alert>
       <dl-alert variant="warning">Please review before proceeding.</dl-alert>
-      <dl-alert variant="danger" dismissible>Something went wrong. Click × to dismiss.</dl-alert>
+      <dl-alert variant="danger">Something went wrong.</dl-alert>
+    </dl-stack>
+  `,
+};
+
+export const AlertsDismissible: Story = {
+  render: () => html`
+    <dl-stack gap="300">
+      <dl-alert variant="info" dismissible>Dismissible info alert.</dl-alert>
+      <dl-alert variant="success" dismissible>Dismissible success alert.</dl-alert>
+      <dl-alert variant="warning" dismissible>Dismissible warning alert.</dl-alert>
+      <dl-alert variant="danger" dismissible>Dismissible danger alert.</dl-alert>
     </dl-stack>
   `,
 };

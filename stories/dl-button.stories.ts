@@ -49,3 +49,23 @@ export const AllSizes: Story = {
     </dl-stack>
   `,
 };
+
+export const Disabled: Story = {
+  render: () => html`
+    <dl-stack direction="horizontal" gap="200" align="center">
+      <dl-button variant="primary" disabled>Primary</dl-button>
+      <dl-button variant="secondary" disabled>Secondary</dl-button>
+      <dl-button variant="danger" disabled>Danger</dl-button>
+      <dl-button variant="ghost" disabled>Ghost</dl-button>
+    </dl-stack>
+  `,
+};
+
+export const FullWidth: Story = {
+  render: () => html`
+    <dl-stack gap="200" style="max-width: 360px;">
+      <dl-button full-width>Full Width Primary</dl-button>
+      <dl-button variant="secondary" full-width>Full Width Secondary</dl-button>
+    </dl-stack>
+  `,
+};
