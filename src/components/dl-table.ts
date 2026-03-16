@@ -5,10 +5,23 @@ import { customElement, property } from 'lit/decorators.js';
  * Simple styled table wrapper.
  *
  * @slot - Table content (thead, tbody, etc.)
+ *
+ * ### Striped rows
+ *
+ * When `striped` is set, the host exposes `--dl-table-stripe-bg` with the
+ * appropriate surface color. Because shadow DOM cannot target nested elements
+ * inside slotted content, consumers must add a companion CSS rule in the
+ * light DOM:
+ *
+ * ```css
+ * dl-table[striped] tbody tr:nth-child(even) {
+ *   background: var(--dl-table-stripe-bg);
+ * }
+ * ```
  */
 @customElement('dl-table')
 export class DlTable extends LitElement {
-  /** Whether rows should have striped backgrounds */
+  /** Enables striped row styling via `--dl-table-stripe-bg` (requires companion light-DOM CSS) */
   @property({ type: Boolean, reflect: true }) striped = false;
 
   static styles = css`

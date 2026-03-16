@@ -8,6 +8,7 @@ import { customElement, property } from 'lit/decorators.js';
  * @slot header - Dialog header content
  * @slot footer - Dialog footer content (actions)
  * @fires dl-close - Fires when dialog is closed
+ * @fires close - Native-compatible close event (works with React onClose)
  */
 @customElement('dl-dialog')
 export class DlDialog extends LitElement {
@@ -106,6 +107,7 @@ export class DlDialog extends LitElement {
   private _close() {
     this.open = false;
     this.dispatchEvent(new CustomEvent('dl-close', { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
   }
 
   private _onBackdropClick(e: Event) {

@@ -5,6 +5,8 @@ import { customElement, property } from 'lit/decorators.js';
  * Alert / notification banner.
  *
  * @slot - Alert message content
+ * @fires dl-dismiss - Fires when alert is dismissed
+ * @fires close - Native-compatible close event (works with React onClose)
  */
 @customElement('dl-alert')
 export class DlAlert extends LitElement {
@@ -69,6 +71,7 @@ export class DlAlert extends LitElement {
 
   private _dismiss() {
     this.dispatchEvent(new CustomEvent('dl-dismiss', { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
     this.remove();
   }
 

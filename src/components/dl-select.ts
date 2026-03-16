@@ -14,6 +14,7 @@ export interface SelectOption {
  * (JSON string). Include `{ value: '', label: 'Choose…' }` for a placeholder.
  *
  * @fires dl-change - Fires on change with `detail.value`
+ * @fires change - Native-compatible change event with `detail.value` (works with React onChange)
  */
 @customElement('dl-select')
 export class DlSelect extends LitElement {
@@ -99,9 +100,11 @@ export class DlSelect extends LitElement {
   `;
 
   private _onChange(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLSelectElement;
     this.value = target.value;
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { value: this.value }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value }, bubbles: true, composed: true }));
   }
 
   render() {

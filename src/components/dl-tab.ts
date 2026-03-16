@@ -34,8 +34,26 @@ export class DlTab extends LitElement {
     return this.value || this.label;
   }
 
+  /** Stable ID suffix derived from the resolved value */
+  get panelId(): string {
+    return `dl-tabpanel-${this.resolvedValue}`;
+  }
+
+  /** Matching tab button ID */
+  get tabId(): string {
+    return `dl-tab-${this.resolvedValue}`;
+  }
+
   render() {
-    return html`<slot></slot>`;
+    return html`
+      <div
+        role="tabpanel"
+        id=${this.panelId}
+        aria-labelledby=${this.tabId}
+      >
+        <slot></slot>
+      </div>
+    `;
   }
 }
 

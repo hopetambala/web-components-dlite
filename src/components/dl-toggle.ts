@@ -5,6 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
  * Toggle / switch control.
  *
  * @fires dl-change - Fires on toggle with `detail.checked`
+ * @fires change - Native-compatible change event with `detail.checked` (works with React onChange)
  */
 @customElement('dl-toggle')
 export class DlToggle extends LitElement {
@@ -69,6 +70,7 @@ export class DlToggle extends LitElement {
     if (this.disabled) return;
     this.checked = !this.checked;
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { checked: this.checked }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { checked: this.checked }, bubbles: true, composed: true }));
   }
 
   render() {

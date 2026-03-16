@@ -6,6 +6,20 @@ import type { DlTab } from './dl-tab.js';
  * Tab bar with tab panels. Wrap `<dl-tab>` children to create a tabbed interface.
  *
  * @fires dl-change - Fires when the active tab changes with `detail.value`
+ * @fires change - Native-compatible change event with `detail.value` (works with React onChange)
+ *
+ * ### Framework usage
+ *
+ * **React** — use `onChange` for the native-compatible event:
+ * ```tsx
+ * <dl-tabs value={activeTab} onChange={(e) => setActiveTab(e.detail.value)}>
+ * ```
+ *
+ * **Vanilla / Astro / Enhance** — use either event name:
+ * ```js
+ * el.addEventListener('change', (e) => console.log(e.detail.value));
+ * el.addEventListener('dl-change', (e) => console.log(e.detail.value));
+ * ```
  *
  * @example
  * ```html
@@ -100,8 +114,7 @@ export class DlTabs extends LitElement {
     this.value = val;
     this._syncTabs();
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { value: val }, bubbles: true, composed: true }));
-    this.dispatchEvent(new Event('change', { bubbles: true }));
-    this.dispatchEvent(new Event('input', { bubbles: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { value: val }, bubbles: true, composed: true }));
   }
 
   render() {
@@ -112,7 +125,9 @@ export class DlTabs extends LitElement {
             <button
               class="tab-button"
               role="tab"
+              id=${tab.tabId}
               aria-selected=${tab.resolvedValue === this.value ? 'true' : 'false'}
+              aria-controls=${tab.panelId}
               ?disabled=${tab.disabled}
               @click=${() => this._selectTab(tab)}
               part="tab"
@@ -122,7 +137,7 @@ export class DlTabs extends LitElement {
           `,
         )}
       </div>
-      <div class="panels" role="tabpanel">
+      <div class="panels">
         <slot @slotchange=${this._onSlotChange}></slot>
       </div>
     `;
