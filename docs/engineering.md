@@ -133,6 +133,37 @@ updated() {
 
 `dl-table` solves this by injecting a `<style>` element into its own light DOM on `connectedCallback()`. The styles use `:host >` selectors to scope rules to the component's children without leaking globally.
 
+### 4. Avoiding `padding`/`margin` on `:host` (dl-badge, dl-alert)
+
+External CSS targeting the host element **always beats** `:host` rules inside shadow DOM — this is per the CSS scoping spec, regardless of specificity. If a consumer's global reset includes:
+
+```css
+* { padding: 0; margin: 0; }
+```
+
+…then any `:host { padding: ... }` inside a shadow root is silently overridden.
+
+**Fix:** Never set `padding` or `margin` on `:host` if consumers might use a universal reset. Instead, apply those properties on an inner shadow DOM element:
+
+```ts
+// ✗ BAD — external * { padding: 0 } wins
+static styles = css`
+  :host { padding: var(--tk-dlite-semantic-spacing-300); }
+`;
+render() { return html`<slot></slot>`; }
+
+// ✓ GOOD — inner element is immune to external selectors
+static styles = css`
+  span { padding: var(--tk-dlite-semantic-spacing-300); }
+`;
+render() { return html`<span><slot></slot></span>`; }
+```
+
+**Affected components and their fixes:**
+- `dl-badge` — visual styles moved from `:host` to inner `<span>`
+- `dl-alert` — `padding` moved from `:host` to inner `.wrapper`
+- `dl-card` — uses `this.style.padding` in `updated()` (inline styles beat `*`)
+
 ### Font Loading
 
 Components reference font-family tokens but do **not** load fonts themselves. The consuming application must load the required Google Fonts (or equivalent):
