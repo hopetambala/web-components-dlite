@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.1](https://github.com/hopetambala/web-components-dlite/compare/v0.1.0...v0.1.1) (2026-03-16)
+
+
+### Bug Fixes
+
+* reset.css affecting styles on the host ([ee60408](https://github.com/hopetambala/web-components-dlite/commit/ee604082d28badfe9c9db6793b17b7cc476a9964))
+
 ## [0.1.0](https://github.com/hopetambala/web-components-dlite/compare/v0.0.5...v0.1.0) (2026-03-16)
 
 
