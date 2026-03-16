@@ -12,7 +12,7 @@ export class DlButton extends LitElement {
   @property({ reflect: true }) variant: 'primary' | 'secondary' | 'danger' | 'ghost' = 'primary';
 
   /** Size */
-  @property({ reflect: true }) size: 'sm' | 'md' | 'lg' = 'md';
+  @property() size: 'sm' | 'md' | 'lg' = 'md';
 
   /** Disabled state */
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -50,14 +50,14 @@ export class DlButton extends LitElement {
       cursor: not-allowed;
     }
 
-    /* Sizes */
+    /* Sizes — default is md (no attribute needed for SSR compat) */
+    button {
+      font-size: var(--tk-dlite-semantic-typography-size-300);
+      padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-400);
+    }
     :host([size='sm']) button {
       font-size: var(--tk-dlite-semantic-typography-size-200);
       padding: var(--tk-dlite-semantic-spacing-100) var(--tk-dlite-semantic-spacing-300);
-    }
-    :host([size='md']) button {
-      font-size: var(--tk-dlite-semantic-typography-size-300);
-      padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-400);
     }
     :host([size='lg']) button {
       font-size: var(--tk-dlite-semantic-typography-size-400);

@@ -7,7 +7,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('dl-divider')
 export class DlDivider extends LitElement {
   /** Orientation */
-  @property({ reflect: true }) orientation: 'horizontal' | 'vertical' = 'horizontal';
+  @property() orientation: 'horizontal' | 'vertical' = 'horizontal';
 
   /** Spacing token name for margin around the divider */
   @property() spacing = '400';
@@ -17,8 +17,6 @@ export class DlDivider extends LitElement {
       display: block;
       border: none;
       background: var(--tk-dlite-semantic-color-border);
-    }
-    :host([orientation='horizontal']) {
       height: 1px;
       width: 100%;
     }
@@ -29,16 +27,15 @@ export class DlDivider extends LitElement {
     }
   `;
 
-  render() {
+  updated() {
     const margin = this.orientation === 'horizontal'
       ? `var(--tk-dlite-semantic-spacing-${this.spacing}) 0`
       : `0 var(--tk-dlite-semantic-spacing-${this.spacing})`;
+    this.style.margin = margin;
+  }
 
-    return html`
-      <style>
-        :host { margin: ${margin}; }
-      </style>
-    `;
+  render() {
+    return html``;
   }
 }
 
