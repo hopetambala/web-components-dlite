@@ -1,26 +1,43 @@
 import type { Preview } from '@storybook/web-components';
 
 /* ------------------------------------------------------------------ */
-/*  Eagerly import all token CSS as raw strings via Vite ?inline      */
+/*  Auto-discover all token CSS via Vite glob imports                 */
+/*  Adding a new brand/theme to the token package automatically       */
+/*  populates the toolbar — no manual imports needed.                 */
 /* ------------------------------------------------------------------ */
-// @ts-expect-error Vite ?inline CSS import
-import puenteDefaultLight     from 'style-dictionary-dlite-tokens/web/puente/default/variables.css?inline';
-// @ts-expect-error Vite ?inline CSS import
-import puenteDefaultDark      from 'style-dictionary-dlite-tokens/web/puente/default/variables.dark.css?inline';
-// @ts-expect-error Vite ?inline CSS import
-import survivorDefaultLight   from 'style-dictionary-dlite-tokens/web/survivor/default/variables.css?inline';
-// @ts-expect-error Vite ?inline CSS import
-import survivorDefaultDark    from 'style-dictionary-dlite-tokens/web/survivor/default/variables.dark.css?inline';
-// @ts-expect-error Vite ?inline CSS import
-import survivorWinterLight    from 'style-dictionary-dlite-tokens/web/survivor/winter-holiday/variables.css?inline';
-// @ts-expect-error Vite ?inline CSS import
-import survivorWinterDark     from 'style-dictionary-dlite-tokens/web/survivor/winter-holiday/variables.dark.css?inline';
+const cssModules = import.meta.glob<{ default: string }>(
+  '@dlite-tokens/*/*/variables{,.dark}.css',
+  { query: '?inline', eager: true },
+);
 
-const TOKEN_MAP: Record<string, Record<string, string>> = {
-  'puente/default':           { light: puenteDefaultLight,   dark: puenteDefaultDark },
-  'survivor/default':         { light: survivorDefaultLight, dark: survivorDefaultDark },
-  'survivor/winter-holiday':  { light: survivorWinterLight,  dark: survivorWinterDark },
-};
+// Parse glob results into TOKEN_MAP and toolbar items
+const TOKEN_MAP: Record<string, Record<string, string>> = {};
+const toolbarItems: { value: string; title: string }[] = [];
+
+for (const [filePath, mod] of Object.entries(cssModules)) {
+  // filePath example: /node_modules/style-dictionary-dlite-tokens/dist/web/puente/default/variables.css
+  //               or: /node_modules/style-dictionary-dlite-tokens/dist/web/survivor/winter-holiday/variables.dark.css
+  const match = filePath.match(/\/([^/]+)\/([^/]+)\/variables(\.dark)?\.css$/);
+  if (!match) continue;
+
+  const [, brand, theme, isDark] = match;
+  const brandTheme = `${brand}/${theme}`;
+  const mode = isDark ? 'dark' : 'light';
+
+  if (!TOKEN_MAP[brandTheme]) TOKEN_MAP[brandTheme] = {};
+  TOKEN_MAP[brandTheme][mode] = mod.default;
+}
+
+// Build sorted toolbar items with formatted labels
+for (const brandTheme of Object.keys(TOKEN_MAP).sort()) {
+  const [brand, theme] = brandTheme.split('/');
+  const label = `${brand.charAt(0).toUpperCase() + brand.slice(1)}${
+    theme === 'default'
+      ? ''
+      : ` ${theme.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`
+  }`;
+  toolbarItems.push({ value: brandTheme, title: label });
+}
 
 /* ------------------------------------------------------------------ */
 /*  Inject the chosen token CSS into head                             */
@@ -33,8 +50,8 @@ function applyTokens(brandTheme: string, mode: string) {
   if (key === currentKey) return;
   currentKey = key;
 
-  const entry = TOKEN_MAP[brandTheme] ?? TOKEN_MAP['puente/default'];
-  const cssText = entry[mode] ?? entry.light;
+  const entry = TOKEN_MAP[brandTheme] ?? TOKEN_MAP[Object.keys(TOKEN_MAP)[0]];
+  const cssText = entry?.[mode] ?? entry?.light ?? '';
 
   let styleEl = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
   if (!styleEl) {
@@ -55,11 +72,7 @@ const preview: Preview = {
       toolbar: {
         title: 'Brand',
         icon: 'paintbrush',
-        items: [
-          { value: 'puente/default',           title: 'Puente' },
-          { value: 'survivor/default',         title: 'Survivor' },
-          { value: 'survivor/winter-holiday',  title: 'Survivor Winter Holiday' },
-        ],
+        items: toolbarItems,
         dynamicTitle: true,
       },
     },
@@ -78,7 +91,7 @@ const preview: Preview = {
   },
 
   initialGlobals: {
-    brandTheme: 'puente/default',
+    brandTheme: toolbarItems[0]?.value ?? 'puente/default',
     colorMode: 'light',
   },
 
@@ -88,7 +101,7 @@ const preview: Preview = {
 
   decorators: [
     (story, context) => {
-      const brand = (context.globals.brandTheme as string) ?? 'puente/default';
+      const brand = (context.globals.brandTheme as string) ?? toolbarItems[0]?.value ?? 'puente/default';
       const mode  = (context.globals.colorMode as string)  ?? 'light';
       applyTokens(brand, mode);
       return story();
