@@ -2,32 +2,47 @@
   "name": "web-components-dlite",
   "version": "0.0.1",
   "description": "Presentational web component library built with Lit, styled by dlite design tokens",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hopetambala/web-components-dlite"
+  },
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.build.json && vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "echo \"No tests yet\" && exit 0",
+    "prepare": "husky"
   },
   "author": "Hope Tambala",
   "license": "ISC",
+  "keywords": ["web-components", "lit", "design-tokens", "dlite", "ui-components"],
   "dependencies": {
     "lit": "^3.2.0",
     "style-dictionary-dlite-tokens": "^0.2.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.4",
+    "@commitlint/config-conventional": "^20.4.4",
     "@storybook/addon-essentials": "^8.4.0",
     "@storybook/web-components": "^8.4.0",
     "@storybook/web-components-vite": "^8.4.0",
+    "commit-and-tag-version": "^12.6.1",
+    "husky": "^9.1.7",
     "storybook": "^8.4.0",
     "typescript": "^5.7.0",
     "vite": "^6.0.0"
