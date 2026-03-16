@@ -5,7 +5,8 @@ Lightweight, presentational web component library built with [Lit](https://lit.d
 - **18 components** — layout, typography, form controls, feedback, overlays
 - **Brand-agnostic** — swap `variables.css` to retheme everything
 - **Dark mode** — toggle between `variables.css` and `variables.dark.css`
-- **SSR-ready** — works with Lit's Declarative Shadow DOM for Next.js
+- **SSR-compatible** — works in Next.js App Router with `"use client"` boundary
+- **TypeScript-first** — ships React JSX type declarations for all 18 components
 - **~6 KB gzipped** (lit is a peer dependency)
 
 ## Quick start
@@ -85,71 +86,75 @@ import 'style-dictionary-dlite-tokens/dist/web/survivor/default/variables.css';
 
 ## Usage with Next.js (App Router)
 
-There are two ways to use dlite web components in Next.js: **Client-Side Rendering (CSR)** or **Server-Side Rendering (SSR)**. Both require the same layout setup.
+Lit web components depend on browser APIs (`customElements`, `HTMLElement`, `ShadowRoot`) that don't exist in Node.js. This means they must be registered client-side. Next.js App Router makes this straightforward with a `"use client"` boundary.
 
-### Layout setup (required for both CSR and SSR)
+### TypeScript setup
 
-```tsx
-// app/layout.tsx
-import { Plus_Jakarta_Sans, Source_Serif_4, Source_Code_Pro } from 'next/font/google';
-import 'style-dictionary-dlite-tokens/web/puente/default/variables.css';
+This package ships auto-generated React JSX type declarations. Add a single reference to get full IntrinsicElements typing for all `<dl-*>` tags:
 
-const heading = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-heading' });
-const body = Source_Serif_4({ subsets: ['latin'], variable: '--font-body' });
-const mono = Source_Code_Pro({ subsets: ['latin'], variable: '--font-mono' });
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html className={`${heading.variable} ${body.variable} ${mono.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
-}
+```ts
+// src/dlite.d.ts  (or any .d.ts in your project)
+/// <reference types="web-components-dlite/react" />
 ```
 
-To switch brands or dark mode, swap the CSS import:
+That's it — no manual `IntrinsicElements` declarations needed. All component props, including union types like `variant`, `size`, and `color`, are fully typed.
 
-```tsx
-// Survivor brand
-import 'style-dictionary-dlite-tokens/web/survivor/default/variables.css';
-// Dark mode
-import 'style-dictionary-dlite-tokens/web/puente/default/variables.dark.css';
+### Token CSS setup
+
+Import the token CSS files in your global stylesheet. Use the [exports map](https://github.com/hopetambala/style-dictionary-dlite) — no `dist/` in the path:
+
+```css
+/* app/globals.css */
+@import "style-dictionary-dlite-tokens/web/puente/default/reset.css";
+@import "style-dictionary-dlite-tokens/web/puente/default/variables.css";
+@import "style-dictionary-dlite-tokens/web/puente/default/utilities.css";
+@import "style-dictionary-dlite-tokens/web/puente/default/components.css";
+@import "style-dictionary-dlite-tokens/web/puente/default/semantics.css";
+```
+
+To switch brands or themes, swap the path segment:
+
+```css
+/* Survivor brand */
+@import "style-dictionary-dlite-tokens/web/survivor/default/variables.css";
+/* Dark mode */
+@import "style-dictionary-dlite-tokens/web/puente/default/variables.dark.css";
 ```
 
 ---
 
-### Option A: Client-Side Rendering (CSR)
+### Option A: Client-Side Rendering (recommended)
 
-The simplest approach. Components render in the browser after JavaScript loads. The page may show unstyled content briefly (FOUC) before components hydrate.
+The standard approach for Lit + Next.js. Components register in the browser and render inside their Shadow DOM after JavaScript loads. React 19 has [native custom element support](https://react.dev/blog/2024/04/25/react-19#support-for-custom-elements), so `<dl-button>` works as a first-class JSX element.
 
-**Step 1:** Create a provider that loads components client-side:
+**Step 1:** Create a registration file and a client provider:
+
+```ts
+// src/dlite-design-system/register.ts
+"use client";
+import "web-components-dlite"; // side-effect: registers all <dl-*> custom elements
+```
 
 ```tsx
-// components/dlite-provider.tsx
-'use client';
+// src/dlite-design-system/DliteProvider.tsx
+"use client";
+import "./register";
 
-import { useEffect, useState } from 'react';
-
-export function DliteProvider({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    import('web-components-dlite').then(() => setReady(true));
-  }, []);
-
-  return <div style={{ visibility: ready ? 'visible' : 'hidden' }}>{children}</div>;
+export default function DliteProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
 ```
 
-**Step 2:** Wrap your app (or specific pages) with the provider:
+**Step 2:** Wrap your root layout:
 
 ```tsx
 // app/layout.tsx
-import { DliteProvider } from '@/components/dlite-provider';
+import DliteProvider from "@/dlite-design-system/DliteProvider";
+import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <body>
         <DliteProvider>{children}</DliteProvider>
       </body>
@@ -158,70 +163,65 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-**Step 3:** Use components in any page — no `'use client'` needed on the page itself:
+**Step 3:** Use components in any `"use client"` page:
 
 ```tsx
 // app/page.tsx
+"use client";
+
 export default function Home() {
   return (
     <dl-card elevation="low" padding="400">
       <dl-heading level={3}>Hello</dl-heading>
       <dl-text color="secondary">Styled by dlite tokens</dl-text>
-      <dl-button variant="primary">Click me</dl-button>
+      <dl-button variant="primary" onClick={() => alert("clicked!")}>
+        Click me
+      </dl-button>
     </dl-card>
   );
 }
 ```
 
-**When to use CSR:** Quick setup, prototyping, internal dashboards, or any app where a brief loading flash is acceptable.
+**Handling events:** Lit components dispatch `CustomEvent`s. In React 19, use the `on` prefix with the event name:
+
+```tsx
+<dl-input
+  placeholder="Email"
+  value={email}
+  onDl-input={(e: CustomEvent) => setEmail(e.detail.value)}
+/>
+
+<dl-toggle
+  checked={enabled}
+  onDl-change={(e: CustomEvent) => setEnabled(e.detail.checked)}
+/>
+```
+
+**When to use CSR:** This is the recommended approach for most apps. It's simple, reliable, and leverages the `"use client"` boundary that Next.js provides natively. Since web components render in their Shadow DOM, there's no layout shift — the token CSS custom properties are already loaded globally, and Shadow DOM elements inherit them before they render.
 
 ---
 
-### Option B: Server-Side Rendering (SSR)
+### Option B: Full Server-Side Rendering (SSR)
 
-Components render their full Shadow DOM in the server HTML using [Declarative Shadow DOM](https://developer.chrome.com/docs/css-ui/declarative-shadow-dom). No FOUC — content is visible immediately on first paint.
+> **⚠️ Experimental / advanced** — Lit SSR is possible but has significant caveats with Next.js App Router.
 
-**Step 1:** Install the Lit SSR packages:
+For true SSR, Lit components render their Shadow DOM on the server as [Declarative Shadow DOM](https://developer.chrome.com/docs/css-ui/declarative-shadow-dom) (`<template shadowrootmode="open">`). This means the styled HTML is in the initial response — no JavaScript needed for first paint.
 
-```bash
-npm install @lit-labs/ssr @lit-labs/nextjs
-```
+**Why this is hard with Next.js App Router:**
 
-**Step 2:** Configure `next.config.js`:
+1. **No official App Router integration.** The `@lit-labs/nextjs` package was built for Pages Router and uses Webpack plugins that don't work with App Router's React Server Components architecture.
 
-```js
-// next.config.js
-const withLitSSR = require('@lit-labs/nextjs')();
+2. **RSC rendering pipeline isn't pluggable.** Server Components return an RSC wire format, not raw HTML. You can't call Lit's `render()` and splice the HTML into Next.js's streaming pipeline without `dangerouslySetInnerHTML`, which breaks React hydration.
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+3. **Hydration mismatches.** If the server emits `<template shadowrootmode>` and the browser expands it into a shadow root, React's hydration won't know about it — leading to mismatches or double-rendering.
 
-module.exports = withLitSSR(nextConfig);
-```
+**If you still want SSR**, the options are:
 
-**Step 3:** Import components at the top of your layout:
+- **Use a non-React meta-framework** like [Astro](https://astro.build) or [Enhance](https://enhance.dev) that has native SSR support for web components
+- **Use `@lit-labs/ssr`** directly in a custom Node.js server outside of Next.js routing
+- **Wait for framework-level support** as the [Web Components Community Group SSR protocol](https://github.com/webcomponents-cg/community-protocols/issues/7) matures
 
-```tsx
-// app/layout.tsx
-import 'web-components-dlite';
-```
-
-**Step 4:** Use components in any page — they work in both server and client components:
-
-```tsx
-// app/page.tsx (no 'use client' needed!)
-export default function Home() {
-  return (
-    <dl-card elevation="low" padding="400">
-      <dl-heading level={3}>Hello</dl-heading>
-      <dl-text color="secondary">Styled by dlite tokens</dl-text>
-      <dl-button variant="primary">Click me</dl-button>
-    </dl-card>
-  );
-}
-```
-
-**When to use SSR:** Production apps where first-paint performance matters, SEO-sensitive pages, or when you want web components to behave like native server-rendered HTML.
+**Recommendation:** For Next.js apps, use **Option A (CSR)**. The `"use client"` pattern is what the Lit team officially recommends for React frameworks. If your app has dynamic data (auth, APIs), your pages are already client-rendered anyway — SSR of the component markup provides no meaningful benefit.
 
 ---
 
@@ -229,11 +229,13 @@ export default function Home() {
 
 | | CSR (Option A) | SSR (Option B) |
 |---|---|---|
-| **Setup** | No extra packages | Requires `@lit-labs/ssr` + `@lit-labs/nextjs` |
-| **First paint** | Brief flash while JS loads | Instant — HTML rendered on server |
-| **SEO** | Content not in initial HTML | Full content in initial HTML |
-| **Complexity** | Simple | Moderate |
-| **`'use client'`** | Only on the provider | Not needed |
+| **Setup** | 3 files, no extra packages | Requires custom server or Astro |
+| **Next.js App Router** | ✅ Fully supported | ❌ No official integration |
+| **First paint** | Tokens load instantly, WC render after JS | Full Shadow DOM in initial HTML |
+| **TypeScript** | ✅ `web-components-dlite/react` types | Same |
+| **React 19 events** | ✅ Native custom element support | Same |
+| **Complexity** | Simple | High |
+| **Recommendation** | **Use this** | Only for non-React SSR frameworks |
 
 ## Components
 
@@ -263,8 +265,16 @@ export default function Home() {
 ```bash
 npm install
 npm run storybook    # Preview components at localhost:6006
-npm run build        # Build library to dist/
+npm run build        # Build library to dist/ (includes auto-generated react.d.ts)
 ```
+
+The build pipeline runs three steps:
+
+1. **Vite** bundles `src/` → `dist/index.js`
+2. **tsc** emits declaration files → `dist/**/*.d.ts`
+3. **generate-react-types** parses all `@customElement` / `@property` decorators and generates `dist/react.d.ts` with React JSX `IntrinsicElements` types
+
+When you add a new component or change props, the types update automatically on next build.
 
 ## How it works
 
