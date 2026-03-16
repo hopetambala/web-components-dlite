@@ -5,15 +5,17 @@
  * and @property() declarations, then writes dist/react.d.ts with
  * React JSX IntrinsicElements typings.
  *
- * Usage:  node --import tsx scripts/generate-react-types.ts
+ * Usage:  tsx scripts/generate-react-types.ts
  *   (called automatically by `npm run build`)
  */
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const COMPONENTS_DIR = path.resolve(import.meta.dirname, "../src/components");
-const OUTPUT_FILE = path.resolve(import.meta.dirname, "../dist/react.d.ts");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const COMPONENTS_DIR = path.resolve(__dirname, "../src/components");
+const OUTPUT_FILE = path.resolve(__dirname, "../dist/react.d.ts");
 
 interface PropInfo {
   /** Property name as written in TS */
@@ -54,28 +56,53 @@ function extractClassName(source: string): string | null {
 /**
  * Extract all @property() declarations and their TS types.
  *
- * Handles patterns like:
- *   @property({ reflect: true }) variant: 'a' | 'b' = 'a';
- *   @property({ type: Boolean, reflect: true }) disabled = false;
- *   @property() gap = '400';
- *   @property({ type: Boolean, attribute: 'close-on-backdrop' }) closeOnBackdrop = true;
- *   @property({ type: Array, converter: { ... } }) options: SelectOption[] = [];
+ * Uses balanced-delimiter parsing (not a single regex) to correctly handle
+ * nested parentheses/braces inside decorator options — e.g. converter functions.
  */
 function extractProps(source: string): { props: PropInfo[]; referencedTypes: string[] } {
   const props: PropInfo[] = [];
   const referencedTypes: string[] = [];
 
-  // Match @property(...) on one OR multiple lines, followed by the property declaration.
-  // We use a regex that captures the decorator options and the property line.
-  const propRegex =
-    /@property\(([^)]*(?:\{[^}]*\}[^)]*)?)\)\s*(\w+)(?:\s*[:]\s*([^=;]+?))?\s*=\s*([^;]+);/g;
+  // Find each `@property(` occurrence, then walk forward counting parens to find
+  // the matching `)`, then parse the property declaration that follows.
+  const marker = "@property(";
+  let searchFrom = 0;
 
-  let match: RegExpExecArray | null;
-  while ((match = propRegex.exec(source)) !== null) {
-    const decoratorOptions = match[1].trim();
-    const propName = match[2];
-    const explicitType = match[3]?.trim();
-    const defaultValue = match[4].trim();
+  while (true) {
+    const decoratorStart = source.indexOf(marker, searchFrom);
+    if (decoratorStart === -1) break;
+
+    // Find the matching `)` using paren counting, starting after the opening `(`
+    const optionsStart = decoratorStart + marker.length;
+    let depth = 1;
+    let i = optionsStart;
+    while (i < source.length && depth > 0) {
+      if (source[i] === "(") depth++;
+      else if (source[i] === ")") depth--;
+      i++;
+    }
+
+    if (depth !== 0) {
+      // Unbalanced parens — skip
+      searchFrom = optionsStart;
+      continue;
+    }
+
+    const decoratorOptions = source.slice(optionsStart, i - 1); // content between ( and )
+
+    // Parse the property declaration after the closing `)`
+    // Expect: `propertyName: TypeAnnotation = defaultValue;`  or  `propertyName = defaultValue;`
+    const afterDecorator = source.slice(i).trimStart();
+    const propMatch = afterDecorator.match(/^(\w+)(?:\s*:\s*([^=;]+?))?\s*=\s*([^;]+);/);
+
+    if (!propMatch) {
+      searchFrom = i;
+      continue;
+    }
+
+    const propName = propMatch[1];
+    const explicitType = propMatch[2]?.trim();
+    const defaultValue = propMatch[3].trim();
 
     // Determine the HTML attribute name
     let attribute = toKebabCase(propName);
@@ -87,7 +114,6 @@ function extractProps(source: string): { props: PropInfo[]; referencedTypes: str
     // Determine the TS type
     let tsType: string;
     if (explicitType) {
-      // Use the explicit annotation, e.g.: 'info' | 'success' | 'warning' | 'danger'
       tsType = cleanType(explicitType);
       // Track any non-primitive type references (e.g. SelectOption[])
       const typeRefs = tsType.match(/\b[A-Z]\w+/g);
@@ -109,6 +135,7 @@ function extractProps(source: string): { props: PropInfo[]; referencedTypes: str
     }
 
     props.push({ name: propName, attribute, tsType });
+    searchFrom = i;
   }
 
   return { props, referencedTypes };

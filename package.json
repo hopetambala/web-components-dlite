@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc -p tsconfig.build.json && npx tsx scripts/generate-react-types.ts",
+    "build": "vite build && tsc -p tsconfig.build.json && tsx scripts/generate-react-types.ts",
     "clean": "node -e \"fs.rmSync('dist',{recursive:true,force:true})\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
