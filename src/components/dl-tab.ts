@@ -29,31 +29,40 @@ export class DlTab extends LitElement {
     }
   `;
 
+  private static _nextId = 0;
+  private _uid = ++DlTab._nextId;
+
   /** Resolved value: explicit value or label fallback */
   get resolvedValue(): string {
     return this.value || this.label;
   }
 
+  private get _slug(): string {
+    return this.resolvedValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || String(this._uid);
+  }
+
   /** Stable ID suffix derived from the resolved value */
   get panelId(): string {
-    return `dl-tabpanel-${this.resolvedValue}`;
+    return `dl-tabpanel-${this._slug}-${this._uid}`;
   }
 
   /** Matching tab button ID */
   get tabId(): string {
-    return `dl-tab-${this.resolvedValue}`;
+    return `dl-tab-${this._slug}-${this._uid}`;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.setAttribute('role', 'tabpanel');
+  }
+
+  updated() {
+    this.id = this.panelId;
+    this.setAttribute('aria-label', this.label);
   }
 
   render() {
-    return html`
-      <div
-        role="tabpanel"
-        id=${this.panelId}
-        aria-labelledby=${this.tabId}
-      >
-        <slot></slot>
-      </div>
-    `;
+    return html`<slot></slot>`;
   }
 }
 

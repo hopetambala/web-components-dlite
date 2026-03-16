@@ -78,13 +78,16 @@ export class DlTabs extends LitElement {
     }
   `;
 
+  private _observer?: MutationObserver;
+
   private _syncTabs() {
     const tabs = [...this.querySelectorAll<DlTab>(':scope > dl-tab')];
     this._tabs = tabs;
 
-    // If no value set yet, pick the first tab
+    // If no value set yet, pick the first enabled tab
     if (!this.value && tabs.length > 0) {
-      this.value = tabs[0].resolvedValue;
+      const firstEnabled = tabs.find((t) => !t.disabled);
+      if (firstEnabled) this.value = firstEnabled.resolvedValue;
     }
 
     // Set active state on children
@@ -95,6 +98,24 @@ export class DlTabs extends LitElement {
 
   private _onSlotChange() {
     this._syncTabs();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._observer = new MutationObserver(() => {
+      this._syncTabs();
+      this.requestUpdate();
+    });
+    this._observer.observe(this, {
+      attributes: true,
+      attributeFilter: ['label', 'value', 'disabled'],
+      subtree: true,
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._observer?.disconnect();
   }
 
   updated(changed: Map<string, unknown>) {
@@ -117,17 +138,64 @@ export class DlTabs extends LitElement {
     this.dispatchEvent(new CustomEvent('change', { detail: { value: val }, bubbles: true, composed: true }));
   }
 
+  private get _enabledTabs(): DlTab[] {
+    return this._tabs.filter((t) => !t.disabled);
+  }
+
+  private _onKeydown(e: KeyboardEvent) {
+    const enabled = this._enabledTabs;
+    if (enabled.length === 0) return;
+
+    const currentIdx = enabled.findIndex((t) => t.resolvedValue === this.value);
+    let nextIdx: number | undefined;
+
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        nextIdx = (currentIdx + 1) % enabled.length;
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        nextIdx = (currentIdx - 1 + enabled.length) % enabled.length;
+        break;
+      case 'Home':
+        nextIdx = 0;
+        break;
+      case 'End':
+        nextIdx = enabled.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    e.preventDefault();
+    this._selectTab(enabled[nextIdx]);
+
+    // Move focus to the newly selected tab button
+    const buttons = this.shadowRoot?.querySelectorAll<HTMLButtonElement>('.tab-button:not([disabled])');
+    if (buttons) {
+      const targetVal = enabled[nextIdx].resolvedValue;
+      for (const btn of buttons) {
+        if (btn.id === `dl-tab-${targetVal}`) {
+          btn.focus();
+          break;
+        }
+      }
+    }
+  }
+
   render() {
     return html`
-      <div class="tab-bar" role="tablist">
+      <div class="tab-bar" role="tablist" @keydown=${this._onKeydown}>
         ${this._tabs.map(
           (tab) => html`
             <button
+              type="button"
               class="tab-button"
               role="tab"
               id=${tab.tabId}
               aria-selected=${tab.resolvedValue === this.value ? 'true' : 'false'}
-              aria-controls=${tab.panelId}
+              tabindex=${tab.resolvedValue === this.value ? 0 : -1}
               ?disabled=${tab.disabled}
               @click=${() => this._selectTab(tab)}
               part="tab"

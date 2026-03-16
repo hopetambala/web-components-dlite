@@ -29,17 +29,18 @@ export class DlCluster extends LitElement {
     return this.justify === 'between' ? 'space-between' : `flex-${this.justify}`;
   }
 
+  private get _align() {
+    return this.align === 'stretch' ? 'stretch' : `flex-${this.align}`;
+  }
+
+  updated() {
+    this.style.gap = `var(--tk-dlite-semantic-spacing-${this.gap})`;
+    this.style.justifyContent = this._justify;
+    this.style.alignItems = this._align;
+  }
+
   render() {
-    return html`
-      <style>
-        :host {
-          gap: var(--tk-dlite-semantic-spacing-${this.gap});
-          justify-content: ${this._justify};
-          align-items: ${this.align === 'stretch' ? 'stretch' : `flex-${this.align}`};
-        }
-      </style>
-      <slot></slot>
-    `;
+    return html`<slot></slot>`;
   }
 }
 

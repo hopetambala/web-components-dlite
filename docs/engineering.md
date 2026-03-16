@@ -108,17 +108,30 @@ document.querySelector('dl-input').addEventListener('dl-input', (e) => {
 
 ---
 
-## Shadow DOM Limitations
+## Shadow DOM Styling Patterns
 
-### dl-table Striped Rows
+Shadow DOM encapsulation means component CSS can't always reach every element. We use three patterns depending on the situation:
 
-`dl-table` sets a CSS custom property `--dl-table-stripe-bg` when `striped` is true, but **cannot style slotted `<tr>` elements** from inside Shadow DOM (slotted content retains light-DOM styling). Consumers must add companion CSS in their own stylesheet:
+### 1. Static `:host` styles (most components)
 
-```css
-dl-table[striped] tr:nth-child(even) {
-  background: var(--dl-table-stripe-bg, rgba(0, 0, 0, 0.03));
+For properties that don't change based on props, use standard Lit `static styles`. This covers the majority of components.
+
+### 2. Host inline styles via `updated()` (dl-stack, dl-cluster)
+
+Lit's `html` tagged template sanitizes interpolated values inside `<style>` blocks, so dynamic CSS values like `gap` or `align-items` won't apply. Instead, set `this.style.*` properties directly on the host element in `updated()`:
+
+```ts
+updated() {
+  this.style.gap = `var(--tk-dlite-semantic-spacing-${this.gap})`;
+  this.style.alignItems = this._alignMap[this.align] || this.align;
 }
 ```
+
+### 3. Light-DOM style injection (dl-table)
+
+`::slotted()` can only target **direct** children of a `<slot>`, not their descendants. Since `<th>` and `<td>` are nested inside a slotted `<table>`, shadow DOM CSS can't reach them.
+
+`dl-table` solves this by injecting a `<style>` element into its own light DOM on `connectedCallback()`. The styles use `:host >` selectors to scope rules to the component's children without leaking globally.
 
 ### Font Loading
 

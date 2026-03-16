@@ -47,10 +47,5 @@ export const Striped: Story = {
         </tbody>
       </table>
     </dl-table>
-    <style>
-      dl-table[striped] tbody tr:nth-child(even) {
-        background: var(--dl-table-stripe-bg);
-      }
-    </style>
   `,
 };
