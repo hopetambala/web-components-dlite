@@ -4,11 +4,24 @@ import { customElement, property } from 'lit/decorators.js';
 /**
  * Simple styled table wrapper.
  *
- * @slot - Table content (thead, tbody, etc.)
+ * Injects a scoped light-DOM `<style>` to style nested table elements
+ * (`<table>`, `<th>`, `<td>`) that `::slotted()` cannot reach.
+ *
+ * @slot - Table content (`<table>` with `<thead>`, `<tbody>`, etc.)
+ *
+ * ### Striped rows
+ *
+ * Set the `striped` attribute to enable alternating row backgrounds:
+ *
+ * ```html
+ * <dl-table striped>
+ *   <table>…</table>
+ * </dl-table>
+ * ```
  */
 @customElement('dl-table')
 export class DlTable extends LitElement {
-  /** Whether rows should have striped backgrounds */
+  /** Enables striped row styling on even tbody rows */
   @property({ type: Boolean, reflect: true }) striped = false;
 
   static styles = css`
@@ -19,23 +32,41 @@ export class DlTable extends LitElement {
       color: var(--tk-dlite-semantic-color-text-primary);
       overflow-x: auto;
     }
-    ::slotted(table) {
-      width: 100%;
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
-    ::slotted(th),
-    ::slotted(td) {
-      padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
-      text-align: left;
-      border-bottom: 1px solid var(--tk-dlite-semantic-color-border);
-    }
-    ::slotted(th) {
-      font-weight: var(--tk-dlite-primitive-fontWeight-semibold);
-      font-size: var(--tk-dlite-semantic-typography-size-200);
-      color: var(--tk-dlite-semantic-color-text-secondary);
-    }
   `;
+
+  private _styleEl: HTMLStyleElement | null = null;
+
+  private _injectStyles() {
+    if (this._styleEl) return;
+    this._styleEl = document.createElement('style');
+    this._styleEl.textContent = `
+      :host > table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      :host > table th,
+      :host > table td {
+        padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
+        text-align: left;
+        border-bottom: 1px solid var(--tk-dlite-semantic-color-border);
+      }
+      :host > table th {
+        font-weight: var(--tk-dlite-primitive-fontWeight-semibold);
+        font-size: var(--tk-dlite-semantic-typography-size-200);
+        color: var(--tk-dlite-semantic-color-text-secondary);
+      }
+      :host([striped]) > table tbody tr:nth-child(even) {
+        background: var(--tk-dlite-semantic-color-surface-sunken);
+      }
+    `;
+    this.prepend(this._styleEl);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._injectStyles();
+  }
 
   render() {
     return html`<slot></slot>`;

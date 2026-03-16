@@ -5,6 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
  * Checkbox with label.
  *
  * @fires dl-change - Fires on change with `detail.checked`
+ * @fires change - Native-compatible change event with `detail.checked` (works with React onChange)
  */
 @customElement('dl-checkbox')
 export class DlCheckbox extends LitElement {
@@ -68,6 +69,7 @@ export class DlCheckbox extends LitElement {
     if (this.disabled) return;
     this.checked = !this.checked;
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { checked: this.checked }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { checked: this.checked }, bubbles: true, composed: true }));
   }
 
   render() {

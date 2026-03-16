@@ -34,6 +34,7 @@ export const Textarea: Story = {
     <dl-stack gap="400" style="max-width: 360px;">
       <dl-textarea label="Message" placeholder="Type your message…" rows="4"></dl-textarea>
       <dl-textarea label="With error" error="Required field" value=""></dl-textarea>
+      <dl-textarea label="Disabled" placeholder="Can't edit" disabled></dl-textarea>
     </dl-stack>
   `,
 };
@@ -48,6 +49,9 @@ export const Select: Story = {
   render: () => html`
     <dl-stack gap="400" style="max-width: 360px;">
       <dl-select label="Country" placeholder="Choose…" .options=${countryOptions}></dl-select>
+      <dl-select label="With error" placeholder="Choose…" error="Selection required" .options=${countryOptions}></dl-select>
+      <dl-select label="Disabled" placeholder="Choose…" disabled .options=${countryOptions}></dl-select>
+      <dl-select label="Pre-selected" value="ca" .options=${countryOptions}></dl-select>
     </dl-stack>
   `,
 };
@@ -57,9 +61,12 @@ export const CheckboxAndToggle: Story = {
     <dl-stack gap="300">
       <dl-checkbox label="I agree to the terms" checked></dl-checkbox>
       <dl-checkbox label="Subscribe to newsletter"></dl-checkbox>
-      <dl-checkbox label="Disabled option" disabled></dl-checkbox>
+      <dl-checkbox label="Disabled unchecked" disabled></dl-checkbox>
+      <dl-checkbox label="Disabled checked" disabled checked></dl-checkbox>
       <dl-toggle label="Dark mode"></dl-toggle>
       <dl-toggle label="Notifications" checked></dl-toggle>
+      <dl-toggle label="Disabled off" disabled></dl-toggle>
+      <dl-toggle label="Disabled on" disabled checked></dl-toggle>
     </dl-stack>
   `,
 };

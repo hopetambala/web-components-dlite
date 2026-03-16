@@ -14,6 +14,7 @@ export interface SelectOption {
  * (JSON string). Include `{ value: '', label: 'Choose…' }` for a placeholder.
  *
  * @fires dl-change - Fires on change with `detail.value`
+ * @fires change - Native-compatible change event with `detail.value` (works with React onChange)
  */
 @customElement('dl-select')
 export class DlSelect extends LitElement {
@@ -81,27 +82,29 @@ export class DlSelect extends LitElement {
     }
     select:focus {
       outline: none;
-      border-color: var(--tk-dlite-semantic-color-primary);
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-primary);
+      border-color: var(--tk-dlite-semantic-color-action-primary);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-action-primary);
     }
     select:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
     select.has-error {
-      border-color: var(--tk-dlite-semantic-color-error);
+      border-color: var(--tk-dlite-semantic-color-feedback-danger);
     }
     .error-text {
       font-size: var(--tk-dlite-semantic-typography-size-200);
-      color: var(--tk-dlite-semantic-color-error);
+      color: var(--tk-dlite-semantic-color-feedback-danger);
       margin-top: var(--tk-dlite-semantic-spacing-100);
     }
   `;
 
   private _onChange(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLSelectElement;
     this.value = target.value;
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { value: this.value }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value }, bubbles: true, composed: true }));
   }
 
   render() {

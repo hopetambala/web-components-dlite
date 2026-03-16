@@ -1,13 +1,15 @@
 # web-components-dlite
 
-Lightweight, presentational web component library built with [Lit](https://lit.dev), styled entirely by [dlite design tokens](https://github.com/hopetambala/style-dictionary-dlite).
+Lightweight, web component library built with [Lit](https://lit.dev), styled entirely by [dlite design tokens](https://github.com/hopetambala/style-dictionary-dlite).
 
-- **18 components** — layout, typography, form controls, feedback, overlays
+- **20 components** — layout, typography, form controls, feedback, navigation, overlays
 - **Brand-agnostic** — swap `variables.css` to retheme everything
 - **Dark mode** — toggle between `variables.css` and `variables.dark.css`
 - **SSR-compatible** — works in Next.js App Router with `"use client"` boundary
-- **TypeScript-first** — ships React JSX type declarations for all 18 components
+- **TypeScript-first** — ships React JSX type declarations for all 20 components
 - **~6 KB gzipped** (lit is a peer dependency)
+
+> **📖 [Engineering Docs](docs/engineering.md)** — event strategy, shadow DOM details, architecture decisions
 
 ## Quick start
 
@@ -182,20 +184,27 @@ export default function Home() {
 }
 ```
 
-**Handling events:** Lit components dispatch `CustomEvent`s. In React 19, use the `on` prefix with the event name:
+**Handling events:** Every event-emitting component dispatches both a `dl-*` semantic event and a native-compatible event (`change`, `input`, `close`). In React 19, use the standard `onChange` / `onInput` props:
 
 ```tsx
 <dl-input
   placeholder="Email"
   value={email}
-  onDl-input={(e: CustomEvent) => setEmail(e.detail.value)}
+  onInput={(e: CustomEvent) => setEmail(e.detail.value)}
+/>
+
+<dl-select
+  options={options}
+  onChange={(e: CustomEvent) => setChoice(e.detail.value)}
 />
 
 <dl-toggle
   checked={enabled}
-  onDl-change={(e: CustomEvent) => setEnabled(e.detail.checked)}
+  onChange={(e: CustomEvent) => setEnabled(e.detail.checked)}
 />
 ```
+
+See [docs/engineering.md](docs/engineering.md) for the full event contract table and framework usage guide.
 
 **When to use CSR:** This is the recommended approach for most apps. It's simple, reliable, and leverages the `"use client"` boundary that Next.js provides natively. Since web components render in their Shadow DOM, there's no layout shift — the token CSS custom properties are already loaded globally, and Shadow DOM elements inherit them before they render.
 
@@ -259,6 +268,8 @@ For true SSR, Lit components render their Shadow DOM on the server as [Declarati
 | `DlSpinner`       | `<dl-spinner>`     | Loading spinner                     |
 | `DlTable`         | `<dl-table>`       | Styled table wrapper                |
 | `DlDialog`        | `<dl-dialog>`      | Modal dialog with backdrop          |
+| `DlTabs`          | `<dl-tabs>`        | Tab bar with tab panels             |
+| `DlTab`           | `<dl-tab>`         | Individual tab panel (child of dl-tabs) |
 
 ## Development
 

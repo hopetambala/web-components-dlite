@@ -6,6 +6,8 @@ import { customElement, property } from 'lit/decorators.js';
  *
  * @fires dl-input - Fires on input with `detail.value`
  * @fires dl-change - Fires on change with `detail.value`
+ * @fires input - Native-compatible input event with `detail.value` (works with React onInput)
+ * @fires change - Native-compatible change event with `detail.value` (works with React onChange)
  */
 @customElement('dl-textarea')
 export class DlTextarea extends LitElement {
@@ -47,36 +49,40 @@ export class DlTextarea extends LitElement {
     }
     textarea:focus {
       outline: none;
-      border-color: var(--tk-dlite-semantic-color-primary);
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-primary);
+      border-color: var(--tk-dlite-semantic-color-action-primary);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-action-primary);
     }
     textarea:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
     textarea.has-error {
-      border-color: var(--tk-dlite-semantic-color-error);
+      border-color: var(--tk-dlite-semantic-color-feedback-danger);
     }
     textarea.has-error:focus {
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-error);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-feedback-danger);
     }
     .error-text {
       font-size: var(--tk-dlite-semantic-typography-size-200);
-      color: var(--tk-dlite-semantic-color-error);
+      color: var(--tk-dlite-semantic-color-feedback-danger);
       margin-top: var(--tk-dlite-semantic-spacing-100);
     }
   `;
 
   private _onInput(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLTextAreaElement;
     this.value = target.value;
     this.dispatchEvent(new CustomEvent('dl-input', { detail: { value: this.value }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('input', { detail: { value: this.value }, bubbles: true, composed: true }));
   }
 
   private _onChange(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLTextAreaElement;
     this.value = target.value;
     this.dispatchEvent(new CustomEvent('dl-change', { detail: { value: this.value }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value }, bubbles: true, composed: true }));
   }
 
   render() {

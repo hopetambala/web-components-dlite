@@ -25,6 +25,15 @@ export const Headings: Story = {
   `,
 };
 
+export const HeadingSizeOverride: Story = {
+  render: () => html`
+    <dl-stack gap="300">
+      <dl-heading level="3" size="800">h3 at size 800</dl-heading>
+      <dl-heading level="1" size="400">h1 at size 400</dl-heading>
+    </dl-stack>
+  `,
+};
+
 export const BodyText: Story = {
   render: () => html`
     <dl-stack gap="200">
@@ -34,6 +43,38 @@ export const BodyText: Story = {
       <dl-text size="500" weight="semibold">Semibold emphasized (500)</dl-text>
       <dl-text color="tertiary">Tertiary color text</dl-text>
     </dl-stack>
+  `,
+};
+
+export const TextWeights: Story = {
+  render: () => html`
+    <dl-stack gap="200">
+      <dl-text weight="regular">Regular weight</dl-text>
+      <dl-text weight="medium">Medium weight</dl-text>
+      <dl-text weight="semibold">Semibold weight</dl-text>
+      <dl-text weight="bold">Bold weight</dl-text>
+    </dl-stack>
+  `,
+};
+
+export const TextColors: Story = {
+  render: () => html`
+    <dl-stack gap="200">
+      <dl-text color="primary">Primary color</dl-text>
+      <dl-text color="secondary">Secondary color</dl-text>
+      <dl-text color="tertiary">Tertiary color</dl-text>
+      <div style="background: var(--tk-dlite-semantic-color-action-primary); padding: 0.5rem; border-radius: 4px;">
+        <dl-text color="on-brand">On-brand color (on colored bg)</dl-text>
+      </div>
+    </dl-stack>
+  `,
+};
+
+export const TextTruncate: Story = {
+  render: () => html`
+    <div style="max-width: 200px; border: 1px dashed var(--tk-dlite-semantic-color-border); padding: 0.5rem;">
+      <dl-text truncate>This is a very long text that should be truncated with an ellipsis when it overflows the container.</dl-text>
+    </div>
   `,
 };
 

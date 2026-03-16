@@ -28,17 +28,20 @@ export class DlStack extends LitElement {
     }
   `;
 
+  private _alignMap: Record<string, string> = {
+    start: 'flex-start',
+    center: 'center',
+    end: 'flex-end',
+    stretch: 'stretch',
+  };
+
+  updated() {
+    this.style.gap = `var(--tk-dlite-semantic-spacing-${this.gap})`;
+    this.style.alignItems = this._alignMap[this.align] || this.align;
+  }
+
   render() {
-    const gapVar = `var(--tk-dlite-semantic-spacing-${this.gap})`;
-    return html`
-      <style>
-        :host {
-          gap: ${gapVar};
-          align-items: ${this.align};
-        }
-      </style>
-      <slot></slot>
-    `;
+    return html`<slot></slot>`;
   }
 }
 
