@@ -19,7 +19,7 @@ export class DlBadge extends LitElement {
       font-size: var(--tk-dlite-semantic-typography-size-200);
       font-weight: var(--tk-dlite-primitive-fontWeight-medium);
       line-height: 1;
-      padding: var(--tk-dlite-semantic-spacing-100) var(--tk-dlite-semantic-spacing-200);
+      padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
       border-radius: var(--tk-dlite-semantic-border-radius-full);
       white-space: nowrap;
     }
