@@ -28,6 +28,10 @@ export { DlSpinner } from './components/dl-spinner.js';
 // Data
 export { DlTable } from './components/dl-table.js';
 
+// Navigation
+export { DlTabs } from './components/dl-tabs.js';
+export { DlTab } from './components/dl-tab.js';
+
 // Overlay
 export { DlDialog } from './components/dl-dialog.js';
 

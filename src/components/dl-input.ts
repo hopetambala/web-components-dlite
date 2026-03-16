@@ -46,8 +46,8 @@ export class DlInput extends LitElement {
     }
     input:focus {
       outline: none;
-      border-color: var(--tk-dlite-semantic-color-primary);
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-primary);
+      border-color: var(--tk-dlite-semantic-color-action-primary);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-action-primary);
     }
     input:disabled {
       opacity: 0.4;
@@ -55,15 +55,15 @@ export class DlInput extends LitElement {
     }
     :host([error]) input,
     input.has-error {
-      border-color: var(--tk-dlite-semantic-color-error);
+      border-color: var(--tk-dlite-semantic-color-feedback-danger);
     }
     :host([error]) input:focus,
     input.has-error:focus {
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-error);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-feedback-danger);
     }
     .error-text {
       font-size: var(--tk-dlite-semantic-typography-size-200);
-      color: var(--tk-dlite-semantic-color-error);
+      color: var(--tk-dlite-semantic-color-feedback-danger);
       margin-top: var(--tk-dlite-semantic-spacing-100);
     }
   `;

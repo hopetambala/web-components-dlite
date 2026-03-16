@@ -47,22 +47,22 @@ export class DlTextarea extends LitElement {
     }
     textarea:focus {
       outline: none;
-      border-color: var(--tk-dlite-semantic-color-primary);
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-primary);
+      border-color: var(--tk-dlite-semantic-color-action-primary);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-action-primary);
     }
     textarea:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
     textarea.has-error {
-      border-color: var(--tk-dlite-semantic-color-error);
+      border-color: var(--tk-dlite-semantic-color-feedback-danger);
     }
     textarea.has-error:focus {
-      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-error);
+      box-shadow: 0 0 0 1px var(--tk-dlite-semantic-color-feedback-danger);
     }
     .error-text {
       font-size: var(--tk-dlite-semantic-typography-size-200);
-      color: var(--tk-dlite-semantic-color-error);
+      color: var(--tk-dlite-semantic-color-feedback-danger);
       margin-top: var(--tk-dlite-semantic-spacing-100);
     }
   `;

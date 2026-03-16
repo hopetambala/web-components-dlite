@@ -74,7 +74,7 @@ export class DlAlert extends LitElement {
 
   render() {
     return html`
-      <div class="wrapper">
+      <div class="wrapper" role="alert">
         <div class="content"><slot></slot></div>
         ${this.dismissible
           ? html`<button class="dismiss" aria-label="Dismiss" @click=${this._dismiss}>&times;</button>`

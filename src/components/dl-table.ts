@@ -35,6 +35,9 @@ export class DlTable extends LitElement {
       font-size: var(--tk-dlite-semantic-typography-size-200);
       color: var(--tk-dlite-semantic-color-text-secondary);
     }
+    :host([striped]) {
+      --dl-table-stripe-bg: var(--tk-dlite-semantic-color-surface-sunken);
+    }
   `;
 
   render() {
