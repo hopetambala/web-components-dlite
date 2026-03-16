@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/hopetambala/web-components-dlite/compare/v0.0.3...v0.0.4) (2026-03-16)
+
+
+### Features
+
+* create tabs component ([58cfab4](https://github.com/hopetambala/web-components-dlite/commit/58cfab47c67a2c12b6566fd146e27b22ff45252d))
+
+
+### Bug Fixes
+
+* fire native events as well as custom dl events ([a12d2e8](https://github.com/hopetambala/web-components-dlite/commit/a12d2e8643350c72a82f3bd5701c1219878f2f97))
+
 ## [0.0.3](https://github.com/hopetambala/web-components-dlite/compare/v0.0.2...v0.0.3) (2026-03-16)
 
 ## 0.0.2 (2026-03-16)
