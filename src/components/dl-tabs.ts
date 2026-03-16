@@ -36,7 +36,7 @@ export class DlTabs extends LitElement {
     .tab-button {
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-400);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
-      font-family: inherit;
+      font-family: var(--tk-dlite-semantic-typography-font-heading);
       font-size: var(--tk-dlite-semantic-typography-size-300);
       font-weight: var(--tk-dlite-primitive-fontWeight-medium);
       white-space: nowrap;
