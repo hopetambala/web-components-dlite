@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.0](https://github.com/hopetambala/web-components-dlite/compare/v0.0.5...v0.1.0) (2026-03-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* release dLite design system!
+
+### Features
+
+* release dLite design system! ([eca38d2](https://github.com/hopetambala/web-components-dlite/commit/eca38d273c5feeec465007f353bb37bcc0cc019e))
+
 ## [0.0.5](https://github.com/hopetambala/web-components-dlite/compare/v0.0.4...v0.0.5) (2026-03-16)
 
 ## [0.0.4](https://github.com/hopetambala/web-components-dlite/compare/v0.0.3...v0.0.4) (2026-03-16)

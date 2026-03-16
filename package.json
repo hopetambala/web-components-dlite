@@ -1,6 +1,6 @@
 {
   "name": "web-components-dlite",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Presentational web component library built with Lit, styled by dlite design tokens",
   "repository": {
     "type": "git",
