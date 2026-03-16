@@ -16,6 +16,9 @@ export class DlInput extends LitElement {
   @property() value = '';
   @property() type: 'text' | 'email' | 'password' | 'number' | 'url' | 'tel' = 'text';
   @property() error = '';
+  @property() min = '';
+  @property() max = '';
+  @property() step = '';
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) required = false;
 
@@ -93,6 +96,9 @@ export class DlInput extends LitElement {
         type=${this.type}
         .value=${this.value}
         placeholder=${this.placeholder}
+        min=${this.min || nothing}
+        max=${this.max || nothing}
+        step=${this.step || nothing}
         ?disabled=${this.disabled}
         ?required=${this.required}
         class=${this.error ? 'has-error' : ''}
