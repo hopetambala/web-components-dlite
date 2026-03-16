@@ -7,7 +7,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('dl-divider')
 export class DlDivider extends LitElement {
   /** Orientation */
-  @property() orientation: 'horizontal' | 'vertical' = 'horizontal';
+  @property({ reflect: true }) orientation: 'horizontal' | 'vertical' = 'horizontal';
 
   /** Spacing token name for margin around the divider */
   @property() spacing = '400';

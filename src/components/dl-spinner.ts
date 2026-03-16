@@ -20,8 +20,9 @@ export class DlSpinner extends LitElement {
       border-radius: 50%;
       animation: spin 0.6s linear infinite;
     }
+    /* Sizes — default is md */
+    .spinner { width: 24px; height: 24px; border-width: 3px; }
     :host([size='sm']) .spinner { width: 16px; height: 16px; border-width: 2px; }
-    :host([size='md']) .spinner { width: 24px; height: 24px; border-width: 3px; }
     :host([size='lg']) .spinner { width: 40px; height: 40px; border-width: 4px; }
 
     @keyframes spin {
