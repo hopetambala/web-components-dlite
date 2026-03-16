@@ -24,6 +24,10 @@ export class DlAlert extends LitElement {
       padding: var(--tk-dlite-semantic-spacing-300) var(--tk-dlite-semantic-spacing-400);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
       border-left: 4px solid;
+      /* Default is info */
+      background: color-mix(in srgb, var(--tk-dlite-semantic-color-feedback-info) 10%, transparent);
+      border-color: var(--tk-dlite-semantic-color-feedback-info);
+      color: var(--tk-dlite-semantic-color-text-primary);
     }
     :host([variant='info']) {
       background: color-mix(in srgb, var(--tk-dlite-semantic-color-feedback-info) 10%, transparent);

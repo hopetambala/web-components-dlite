@@ -21,8 +21,9 @@ export class DlBadge extends LitElement {
       line-height: 1;
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
       border-radius: var(--tk-dlite-semantic-border-radius-full);
-      white-space: nowrap;
-    }
+      white-space: nowrap;      /* Default variant */
+      background: var(--tk-dlite-semantic-color-action-secondary);
+      color: var(--tk-dlite-semantic-color-text-primary);    }
     :host([variant='default']) {
       background: var(--tk-dlite-semantic-color-action-secondary);
       color: var(--tk-dlite-semantic-color-text-primary);

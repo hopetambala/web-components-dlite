@@ -43,12 +43,19 @@ export class DlIconButton extends LitElement {
       cursor: not-allowed;
     }
 
-    /* Sizes */
+    /* Sizes — default is md */
+    button { width: 36px; height: 36px; font-size: 18px; }
     :host([size='sm']) button { width: 28px; height: 28px; font-size: 14px; }
-    :host([size='md']) button { width: 36px; height: 36px; font-size: 18px; }
     :host([size='lg']) button { width: 44px; height: 44px; font-size: 22px; }
 
-    /* Variants */
+    /* Variants — default is secondary */
+    button {
+      background: var(--tk-dlite-semantic-color-action-secondary);
+      color: var(--tk-dlite-semantic-color-text-primary);
+    }
+    button:hover:not(:disabled) {
+      background: var(--tk-dlite-semantic-color-action-secondary-active);
+    }
     :host([variant='primary']) button {
       background: var(--tk-dlite-semantic-color-action-primary);
       color: var(--tk-dlite-semantic-color-text-on-brand);

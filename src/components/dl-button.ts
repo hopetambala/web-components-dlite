@@ -12,7 +12,7 @@ export class DlButton extends LitElement {
   @property({ reflect: true }) variant: 'primary' | 'secondary' | 'danger' | 'ghost' = 'primary';
 
   /** Size */
-  @property() size: 'sm' | 'md' | 'lg' = 'md';
+  @property({ reflect: true }) size: 'sm' | 'md' | 'lg' = 'md';
 
   /** Disabled state */
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -54,6 +54,12 @@ export class DlButton extends LitElement {
     button {
       font-size: var(--tk-dlite-semantic-typography-size-300);
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-400);
+      /* Default variant is primary */
+      background: var(--tk-dlite-semantic-color-action-primary);
+      color: var(--tk-dlite-semantic-color-text-on-brand);
+    }
+    button:hover:not(:disabled) {
+      background: var(--tk-dlite-semantic-color-action-primary-active);
     }
     :host([size='sm']) button {
       font-size: var(--tk-dlite-semantic-typography-size-200);
