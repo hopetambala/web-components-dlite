@@ -58,7 +58,13 @@ export class DlCard extends LitElement {
       pointer-events: none;
     }
     button {
-      all: unset;
+      appearance: none;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
       display: block;
       width: 100%;
       text-align: left;

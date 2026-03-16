@@ -21,7 +21,6 @@ export class DlAlert extends LitElement {
       display: block;
       font-family: var(--tk-dlite-semantic-typography-font-body);
       font-size: var(--tk-dlite-semantic-typography-size-300);
-      padding: var(--tk-dlite-semantic-spacing-300) var(--tk-dlite-semantic-spacing-400);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
       border-left: 4px solid;
       /* Default is info */
@@ -54,6 +53,7 @@ export class DlAlert extends LitElement {
       align-items: flex-start;
       justify-content: space-between;
       gap: var(--tk-dlite-semantic-spacing-200);
+      padding: var(--tk-dlite-semantic-spacing-300) var(--tk-dlite-semantic-spacing-400);
     }
     .content {
       flex: 1;
