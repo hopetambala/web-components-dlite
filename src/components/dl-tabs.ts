@@ -60,7 +60,7 @@ export class DlTabs extends LitElement {
     }
     .tab-button[aria-selected='true'] {
       background-color: var(--tk-dlite-semantic-color-action-primary);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     .tab-button[aria-selected='false'] {
       background-color: var(--tk-dlite-semantic-color-surface-raised);

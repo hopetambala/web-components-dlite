@@ -35,19 +35,19 @@ export class DlBadge extends LitElement {
     }
     :host([variant='primary']) span {
       background: var(--tk-dlite-semantic-color-action-primary);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='success']) span {
       background: var(--tk-dlite-semantic-color-feedback-success);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='warning']) span {
       background: var(--tk-dlite-semantic-color-feedback-warning);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='danger']) span {
       background: var(--tk-dlite-semantic-color-feedback-danger);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
   `;
 

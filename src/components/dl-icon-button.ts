@@ -58,7 +58,7 @@ export class DlIconButton extends LitElement {
     }
     :host([variant='primary']) button {
       background: var(--tk-dlite-semantic-color-action-primary);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='primary']) button:hover:not(:disabled) {
       background: var(--tk-dlite-semantic-color-action-primary-active);

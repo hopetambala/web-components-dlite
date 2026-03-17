@@ -9,7 +9,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('dl-button')
 export class DlButton extends LitElement {
   /** Visual variant */
-  @property({ reflect: true }) variant: 'primary' | 'secondary' | 'danger' | 'ghost' = 'primary';
+  @property({ reflect: true }) variant: 'primary' | 'secondary' | 'danger' | 'ghost' | 'brand' = 'primary';
 
   /** Size */
   @property({ reflect: true }) size: 'sm' | 'md' | 'lg' = 'md';
@@ -56,7 +56,7 @@ export class DlButton extends LitElement {
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-400);
       /* Default variant is primary */
       background: var(--tk-dlite-semantic-color-action-primary);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     button:hover:not(:disabled) {
       background: var(--tk-dlite-semantic-color-action-primary-active);
@@ -73,7 +73,7 @@ export class DlButton extends LitElement {
     /* Primary */
     :host([variant='primary']) button {
       background: var(--tk-dlite-semantic-color-action-primary);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='primary']) button:hover:not(:disabled) {
       background: var(--tk-dlite-semantic-color-action-primary-active);
@@ -91,7 +91,7 @@ export class DlButton extends LitElement {
     /* Danger */
     :host([variant='danger']) button {
       background: var(--tk-dlite-semantic-color-feedback-danger);
-      color: var(--tk-dlite-semantic-color-text-on-brand);
+      color: var(--tk-dlite-semantic-color-text-on-primary);
     }
     :host([variant='danger']) button:hover:not(:disabled) {
       background: var(--tk-dlite-semantic-color-feedback-danger-active);
@@ -104,6 +104,15 @@ export class DlButton extends LitElement {
     }
     :host([variant='ghost']) button:hover:not(:disabled) {
       background: var(--tk-dlite-semantic-color-action-secondary);
+    }
+
+    /* Brand */
+    :host([variant='brand']) button {
+      background: var(--tk-dlite-semantic-color-brand);
+      color: var(--tk-dlite-semantic-color-text-on-brand);
+    }
+    :host([variant='brand']) button:hover:not(:disabled) {
+      filter: brightness(0.9);
     }
   `;
 

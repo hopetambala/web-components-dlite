@@ -6,7 +6,7 @@ const meta: Meta = {
   title: 'Actions/Button',
   component: 'dl-button',
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'danger', 'ghost'] },
+    variant: { control: 'select', options: ['primary', 'secondary', 'danger', 'ghost', 'brand'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     fullWidth: { control: 'boolean' },
@@ -40,6 +40,11 @@ export const Ghost: Story = {
   render: (args) => html`<dl-button variant=${args.variant} size=${args.size}>Ghost</dl-button>`,
 };
 
+export const Brand: Story = {
+  args: { variant: 'brand', size: 'md' },
+  render: (args) => html`<dl-button variant=${args.variant} size=${args.size}>Brand</dl-button>`,
+};
+
 export const AllSizes: Story = {
   render: () => html`
     <dl-stack direction="horizontal" gap="200" align="center">
@@ -57,6 +62,7 @@ export const Disabled: Story = {
       <dl-button variant="secondary" disabled>Secondary</dl-button>
       <dl-button variant="danger" disabled>Danger</dl-button>
       <dl-button variant="ghost" disabled>Ghost</dl-button>
+      <dl-button variant="brand" disabled>Brand</dl-button>
     </dl-stack>
   `,
 };
