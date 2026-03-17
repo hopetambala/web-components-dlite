@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.3](https://github.com/hopetambala/web-components-dlite/compare/v0.1.2...v0.1.3) (2026-03-17)
+
+
+### Features
+
+* update house of brands ([58bac40](https://github.com/hopetambala/web-components-dlite/commit/58bac40a3b834753dc8d2ea6702846f5ec43eadc))
+
 ## [0.1.2](https://github.com/hopetambala/web-components-dlite/compare/v0.1.1...v0.1.2) (2026-03-16)
 
 ## [0.1.1](https://github.com/hopetambala/web-components-dlite/compare/v0.1.0...v0.1.1) (2026-03-16)
