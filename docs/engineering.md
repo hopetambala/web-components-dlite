@@ -174,6 +174,41 @@ Components reference font-family tokens but do **not** load fonts themselves. Th
 
 ---
 
+## SSR Hydration & Reflected Properties
+
+When using these components in SSR frameworks (Next.js, Astro, etc.), **reflected properties with defaults** can cause hydration mismatches.
+
+### The Problem
+
+Lit's `reflect: true` syncs a property's value back to the DOM as an HTML attribute. If a component has `@property({ reflect: true }) size = 'md'`, Lit will set `size="md"` on the element when it initializes on the client. However, the server-rendered HTML won't include that attribute (since the server just outputs the raw tag), causing a mismatch:
+
+- **Server HTML:** `<dl-spinner>`
+- **Client DOM after Lit init:** `<dl-spinner size="md">`
+
+React (and Next.js) will log a hydration error because the attributes don't match.
+
+### The Fix
+
+Always pass the default value explicitly in JSX when using components with reflected defaults:
+
+```tsx
+// Bad — hydration mismatch
+<dl-spinner></dl-spinner>
+
+// Good — server and client agree
+<dl-spinner size="md"></dl-spinner>
+```
+
+### Which Components Are Affected
+
+Any component with `@property({ reflect: true })` and a non-empty default. Currently:
+
+- `dl-spinner` — `size` defaults to `'md'`
+
+When adding new reflected properties with defaults, document them here so consumers know to pass the value explicitly.
+
+---
+
 ## React Type Definitions
 
 The build generates `dist/react.d.ts` which provides JSX IntrinsicElements types for all 20 components. This gives TypeScript consumers autocomplete and type-checking for properties and events.

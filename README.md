@@ -7,7 +7,7 @@ Lightweight, web component library built with [Lit](https://lit.dev), styled ent
 - **Dark mode** — toggle between `variables.css` and `variables.dark.css`
 - **SSR-compatible** — works in Next.js App Router with `"use client"` boundary
 - **TypeScript-first** — ships React JSX type declarations for all 20 components
-- **~6 KB gzipped** (lit is a peer dependency)
+- **~8 KB gzipped** (lit is a peer dependency)
 
 > **📖 [Engineering Docs](docs/engineering.md)** — event strategy, shadow DOM details, architecture decisions
 
