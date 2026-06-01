@@ -16,6 +16,8 @@ export class DlTextarea extends LitElement {
   @property() value = '';
   @property({ type: Number }) rows = 4;
   @property() error = '';
+  /** Min-height preset: sm | md | lg (overrides the default min height) */
+  @property({ reflect: true }) size: 'sm' | 'md' | 'lg' = 'md';
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) required = false;
 
@@ -42,7 +44,16 @@ export class DlTextarea extends LitElement {
       border-radius: var(--tk-dlite-semantic-border-radius-md);
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
       resize: vertical;
-      transition: border-color var(--tk-dlite-semantic-duration-fast) ease;
+      transition: border-color var(--tk-dlite-semantic-motion-duration-quick) ease;
+    }
+    :host([size='sm']) textarea {
+      min-height: 4rem;
+    }
+    :host([size='md']) textarea {
+      min-height: 7rem;
+    }
+    :host([size='lg']) textarea {
+      min-height: 11rem;
     }
     textarea::placeholder {
       color: var(--tk-dlite-semantic-color-text-tertiary);

@@ -32,7 +32,7 @@ export class DlIconButton extends LitElement {
       cursor: pointer;
       font-family: var(--tk-dlite-semantic-typography-font-heading);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
-      transition: background var(--tk-dlite-semantic-duration-fast) ease;
+      transition: background var(--tk-dlite-semantic-motion-duration-quick) ease;
     }
     button:focus-visible {
       outline: 2px solid var(--tk-dlite-semantic-color-primary);

@@ -3,6 +3,9 @@ export { DlStack } from './components/dl-stack.js';
 export { DlCluster } from './components/dl-cluster.js';
 export { DlCard } from './components/dl-card.js';
 export { DlDivider } from './components/dl-divider.js';
+export { DlList } from './components/dl-list.js';
+export { DlListItem } from './components/dl-list-item.js';
+export { DlAccordion } from './components/dl-accordion.js';
 
 // Typography
 export { DlHeading } from './components/dl-heading.js';
@@ -36,4 +39,4 @@ export { DlTab } from './components/dl-tab.js';
 export { DlDialog } from './components/dl-dialog.js';
 
 // Token helpers
-export { color, type, space, duration, radius, elevation } from './tokens.js';
+export { color, type, space, duration, easing, radius, elevation, zIndex } from './tokens.js';

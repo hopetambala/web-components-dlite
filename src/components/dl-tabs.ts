@@ -56,7 +56,7 @@ export class DlTabs extends LitElement {
       white-space: nowrap;
       cursor: pointer;
       border: none;
-      transition: background-color var(--tk-dlite-semantic-duration-fast) ease;
+      transition: background-color var(--tk-dlite-semantic-motion-duration-quick) ease;
     }
     .tab-button[aria-selected='true'] {
       background-color: var(--tk-dlite-semantic-color-action-primary);

@@ -37,8 +37,8 @@ export class DlButton extends LitElement {
       font-family: var(--tk-dlite-semantic-typography-font-heading);
       font-weight: var(--tk-dlite-primitive-fontWeight-semibold);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
-      transition: background var(--tk-dlite-semantic-duration-fast) ease,
-                  color var(--tk-dlite-semantic-duration-fast) ease;
+      transition: background var(--tk-dlite-semantic-motion-duration-quick) ease,
+                  color var(--tk-dlite-semantic-motion-duration-quick) ease;
       width: 100%;
     }
     button:focus-visible {

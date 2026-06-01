@@ -64,7 +64,7 @@ export class DlSelect extends LitElement {
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
       appearance: none;
       cursor: pointer;
-      transition: border-color var(--tk-dlite-semantic-duration-fast) ease;
+      transition: border-color var(--tk-dlite-semantic-motion-duration-quick) ease;
       padding-right: var(--tk-dlite-semantic-spacing-600);
     }
     .select-wrapper::after {

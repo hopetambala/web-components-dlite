@@ -118,3 +118,14 @@ export const FormExample: Story = {
     `;
   },
 };
+
+export const TextareaSizes: Story = {
+  render: () => html`
+    <dl-stack gap="400" style="max-width: 400px;">
+      <dl-textarea label="Small" size="sm" placeholder="size=sm"></dl-textarea>
+      <dl-textarea label="Medium (default)" size="md" placeholder="size=md"></dl-textarea>
+      <dl-textarea label="Large" size="lg" placeholder="size=lg"></dl-textarea>
+      <dl-textarea label="With error" error="This field is required"></dl-textarea>
+    </dl-stack>
+  `,
+};

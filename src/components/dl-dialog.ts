@@ -21,6 +21,12 @@ export class DlDialog extends LitElement {
   /** Whether clicking the backdrop closes the dialog */
   @property({ type: Boolean, attribute: 'close-on-backdrop' }) closeOnBackdrop = true;
 
+  /** Whether pressing Escape closes the dialog */
+  @property({ type: Boolean, attribute: 'close-on-escape' }) closeOnEscape = true;
+
+  /** Panel width: narrow (20rem) | normal (40rem) | wide (60rem) */
+  @property({ reflect: true }) size: 'narrow' | 'normal' | 'wide' = 'normal';
+
   static styles = css`
     :host {
       display: none;
@@ -31,23 +37,31 @@ export class DlDialog extends LitElement {
     .backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
+      background: rgba(0, 0, 0, var(--tk-dlite-semantic-motion-opacity-backdrop));
+      z-index: var(--tk-dlite-semantic-z-index-modal);
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: var(--tk-dlite-semantic-spacing-400);
     }
     .panel {
       background: var(--tk-dlite-semantic-color-surface-raised);
       border-radius: var(--tk-dlite-semantic-border-radius-lg);
       box-shadow: var(--tk-dlite-semantic-elevation-high);
-      max-width: 500px;
-      width: 90vw;
+      max-width: var(--tk-dlite-semantic-sizing-modal-width-normal);
+      width: 100%;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      animation: dialog-in var(--tk-dlite-semantic-duration-normal) ease;
+      animation: dialog-in var(--tk-dlite-semantic-motion-duration-base)
+                 var(--tk-dlite-semantic-motion-easing-entrance);
+    }
+    :host([size='narrow']) .panel {
+      max-width: var(--tk-dlite-semantic-sizing-modal-width-narrow);
+    }
+    :host([size='wide']) .panel {
+      max-width: var(--tk-dlite-semantic-sizing-modal-width-wide);
     }
     @keyframes dialog-in {
       from {
@@ -103,6 +117,22 @@ export class DlDialog extends LitElement {
       display: none;
     }
   `;
+
+  private _onKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this.open && this.closeOnEscape) {
+      this._close();
+    }
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('keydown', this._onKeydown);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this._onKeydown);
+  }
 
   private _close() {
     this.open = false;
