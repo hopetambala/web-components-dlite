@@ -33,7 +33,7 @@ export class DlToggle extends LitElement {
       border-radius: var(--tk-dlite-semantic-border-radius-full);
       background: var(--tk-dlite-semantic-color-border);
       position: relative;
-      transition: background var(--tk-dlite-semantic-duration-fast) ease;
+      transition: background var(--tk-dlite-semantic-motion-duration-quick) ease;
       flex-shrink: 0;
     }
     :host([checked]) .track {
@@ -47,7 +47,7 @@ export class DlToggle extends LitElement {
       position: absolute;
       top: 2px;
       left: 2px;
-      transition: transform var(--tk-dlite-semantic-duration-fast) ease;
+      transition: transform var(--tk-dlite-semantic-motion-duration-quick) ease;
     }
     :host([checked]) .thumb {
       transform: translateX(18px);

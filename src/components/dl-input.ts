@@ -44,7 +44,7 @@ export class DlInput extends LitElement {
       border: 1px solid var(--tk-dlite-semantic-color-border);
       border-radius: var(--tk-dlite-semantic-border-radius-md);
       padding: var(--tk-dlite-semantic-spacing-200) var(--tk-dlite-semantic-spacing-300);
-      transition: border-color var(--tk-dlite-semantic-duration-fast) ease;
+      transition: border-color var(--tk-dlite-semantic-motion-duration-quick) ease;
     }
     input::placeholder {
       color: var(--tk-dlite-semantic-color-text-tertiary);

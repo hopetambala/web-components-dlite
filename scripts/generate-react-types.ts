@@ -207,7 +207,7 @@ ${elements}
 function main() {
   const files = fs
     .readdirSync(COMPONENTS_DIR)
-    .filter((f) => f.startsWith("dl-") && f.endsWith(".ts"))
+    .filter((f) => f.startsWith("dl-") && f.endsWith(".ts") && !f.endsWith(".test.ts"))
     .sort();
 
   const components: ComponentInfo[] = [];

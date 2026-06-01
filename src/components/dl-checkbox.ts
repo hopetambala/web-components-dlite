@@ -35,7 +35,7 @@ export class DlCheckbox extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all var(--tk-dlite-semantic-duration-fast) ease;
+      transition: all var(--tk-dlite-semantic-motion-duration-quick) ease;
       flex-shrink: 0;
     }
     :host([checked]) .box {

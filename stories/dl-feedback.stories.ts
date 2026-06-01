@@ -64,3 +64,23 @@ export const Dialog: Story = {
     `;
   },
 };
+
+export const DialogSizes: Story = {
+  render: () => {
+    const open = (size: 'narrow' | 'normal' | 'wide') => {
+      const d = document.getElementById('sized-dialog') as any;
+      d.size = size;
+      d.open = true;
+    };
+    return html`
+      <dl-stack direction="horizontal" gap="200">
+        <dl-button @click=${() => open('narrow')}>Narrow</dl-button>
+        <dl-button @click=${() => open('normal')}>Normal</dl-button>
+        <dl-button @click=${() => open('wide')}>Wide</dl-button>
+      </dl-stack>
+      <dl-dialog id="sized-dialog" heading="Sized dialog">
+        <dl-text>Width follows the <code>size</code> attribute (narrow / normal / wide). Press Escape or click the backdrop to close.</dl-text>
+      </dl-dialog>
+    `;
+  },
+};

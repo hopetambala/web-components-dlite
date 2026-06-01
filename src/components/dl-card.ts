@@ -37,9 +37,9 @@ export class DlCard extends LitElement {
     }
     :host([interactive]) {
       cursor: pointer;
-      transition: background var(--tk-dlite-semantic-duration-fast) ease,
-                  border-color var(--tk-dlite-semantic-duration-fast) ease,
-                  box-shadow var(--tk-dlite-semantic-duration-fast) ease;
+      transition: background var(--tk-dlite-semantic-motion-duration-quick) ease,
+                  border-color var(--tk-dlite-semantic-motion-duration-quick) ease,
+                  box-shadow var(--tk-dlite-semantic-motion-duration-quick) ease;
     }
     :host([interactive]:hover) {
       background: var(--tk-dlite-semantic-color-surface-hover);

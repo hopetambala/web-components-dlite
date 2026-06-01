@@ -16,9 +16,16 @@ export const type = (name: string) =>
 export const space = (name: string) =>
   `var(--tk-dlite-semantic-spacing-${name})`;
 
-/** Semantic duration token */
+/**
+ * Semantic motion duration token (since tokens 0.3.0).
+ * Names: instant, micro, quick, snappy, base, substantial, slow, xslow, pulse, toast, dismiss.
+ */
 export const duration = (name: string) =>
-  `var(--tk-dlite-semantic-duration-${name})`;
+  `var(--tk-dlite-semantic-motion-duration-${name})`;
+
+/** Semantic motion easing token — standard, entrance, exit, linear (since tokens 0.3.0) */
+export const easing = (name: string) =>
+  `var(--tk-dlite-semantic-motion-easing-${name})`;
 
 /** Semantic border-radius token */
 export const radius = (name: string) =>
@@ -27,3 +34,7 @@ export const radius = (name: string) =>
 /** Semantic elevation token */
 export const elevation = (name: string) =>
   `var(--tk-dlite-semantic-elevation-${name})`;
+
+/** Semantic z-index layer token — default, sticky, dropdown, overlay, modal (since tokens 0.3.0) */
+export const zIndex = (name: string) =>
+  `var(--tk-dlite-semantic-z-index-${name})`;
